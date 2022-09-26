@@ -20,7 +20,7 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 
 	var book models.Books
 	json.Unmarshal(body, &book)
-	book.ID = "2343"
+	book.ID = "2"
 	mocks.Books = append(mocks.Books, book)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode("A book created")

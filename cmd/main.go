@@ -19,7 +19,7 @@ func main() {
 
 	// Handlers
 	r.HandleFunc("/api/books", handlers.GetBooks).Methods("GET")
-	r.HandleFunc("/api/book/{id}", getBook).Methods("GET")
+	r.HandleFunc("/api/book/{id}", handlers.GetBook).Methods("GET")
 	r.HandleFunc("/api/books", handlers.CreateBook).Methods("POST")
 
 	log.Println("Api is running")
