@@ -18,5 +18,5 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	json.NewEncoder(w).Encode(&mocks.Books)
+
 }

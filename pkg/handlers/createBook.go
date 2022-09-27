@@ -6,7 +6,9 @@ import (
 	"example/restapi/pkg/models"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+	"strconv"
 )
 
 func CreateBook(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +22,7 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 
 	var book models.Books
 	json.Unmarshal(body, &book)
-	book.ID = "2"
+	book.ID = strconv.Itoa(rand.Intn(10000))
 	mocks.Books = append(mocks.Books, book)
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode("A book created")
