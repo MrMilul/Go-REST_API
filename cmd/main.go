@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-
+	// DB initialization
 	DB := db.Init()
 	h := handlers.New(DB)
 	// Router
