@@ -1,12 +1,8 @@
 package models
 
-type Books struct {
-	ID     string  `json: "id"`
-	Isbn   string  `json: "isbn"`
-	Title  string  `json: "title"`
-	Author *Author `json: "author"`
-}
-
-type Author struct {
-	FullName string `"json:fullname"`
+type Book struct {
+	Id     int    `json:"id" gorm:"primarykey"`
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Desc   string `json:"desc"`
 }

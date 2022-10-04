@@ -1,6 +1,7 @@
 package main
 
 import (
+	"example/restapi/pkg/db"
 	"example/restapi/pkg/handlers"
 	"log"
 	"net/http"
@@ -8,19 +9,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func getBook(w http.ResponseWriter, r *http.Request) {
-	return
-}
-
 func main() {
 
+	DB := db.Init()
+	h := handlers.New(DB)
 	// Router
 	r := mux.NewRouter()
-
 	// Handlers
-	r.HandleFunc("/api/books", handlers.GetBooks).Methods("GET")
-	r.HandleFunc("/api/book/{id}", handlers.GetBook).Methods("GET")
-	r.HandleFunc("/api/books", handlers.CreateBook).Methods("POST")
+	r.HandleFunc("/api/books", h.GetBooks).Methods(http.MethodGet)
+	r.HandleFunc("/api/book/{id}", h.GetBook).Methods(http.MethodGet)
+	r.HandleFunc("/api/books", h.CreateBook).Methods(http.MethodPost)
+	r.HandleFunc("api/book/{id}", h.DeleteBook).Methods(http.MethodDelete)
+	r.HandleFunc("api/book/{id}", h.UpdateBook).Methods(http.MethodPut)
 
 	log.Println("Api is running")
 	http.ListenAndServe(":8000", r)

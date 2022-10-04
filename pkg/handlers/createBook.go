@@ -2,16 +2,14 @@ package handlers
 
 import (
 	"encoding/json"
-	"example/restapi/pkg/mocks"
 	"example/restapi/pkg/models"
+	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"net/http"
-	"strconv"
 )
 
-func CreateBook(w http.ResponseWriter, r *http.Request) {
+func (h handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -20,11 +18,16 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var book models.Books
+	var book models.Book
 	json.Unmarshal(body, &book)
-	book.ID = strconv.Itoa(rand.Intn(10000))
-	mocks.Books = append(mocks.Books, book)
+
+	// book.ID = strconv.Itoa(rand.Intn(10000))
+	// mocks.Books = append(mocks.Books, book)
+	if result := h.DB.Create(&book); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode("A book created")
+	json.NewEncoder(w).Encode("A book Created")
 
 }
