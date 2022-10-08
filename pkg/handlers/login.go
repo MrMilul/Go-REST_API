@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+	"example/restapi/pkg/models"
+	"example/restapi/pkg/utils"
 	"log"
 	"net/http"
 	"time"
@@ -25,18 +27,23 @@ var users = map[string]string{
 	"user2": "password2",
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func (h handler) Login(w http.ResponseWriter, r *http.Request) {
 	var user Cridentials
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		log.Fatal(err)
 	}
+	var User models.User
+	if result := h.DB.Where("Username=?", user.Username).Find(&User); result.Error != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("User does not exist!"))
+		return
+	}
 
-	expectedPassword, ok := users[user.Username]
-
-	if !ok || expectedPassword != user.Password {
+	if !utils.CheckHashedPassword(user.Password, User.Password) {
 		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Invalid Cridentials"))
 		return
 	}
 

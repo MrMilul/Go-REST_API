@@ -24,6 +24,8 @@ func main() {
 
 	// User Handlers
 	r.HandleFunc("/api/users", h.SignUp).Methods(http.MethodPost)
+	r.HandleFunc("/api/login", h.Login).Methods(http.MethodPost)
+
 	log.Println("Api is running")
 	http.ListenAndServe(":8000", r)
 }
